@@ -106,7 +106,7 @@ const NODES = {
         floor: 1,
         x: 280,
         y: 300,
-        type: waypoint',
+        type: 'waypoint',
         nameJa: '噴水',
         nameEn: 'Fountain'
     },
