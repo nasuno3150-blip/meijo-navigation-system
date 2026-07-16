@@ -2,12 +2,18 @@
 // 座標データとグラフ構造
 // ========================================
 
-// キャンバスの基準座標（実際の地図画像のサイズに合わせて調整）
-const MAP_WIDTH = 1200;
-const MAP_HEIGHT = 900;
+// キャンバスの基準座標（地図画像のサイズに合わせて調整）
+const MAP_WIDTH = 1400;
+const MAP_HEIGHT = 1000;
 
 // 1階と2階の距離を計算するための重み付け
 const FLOOR_DISTANCE_WEIGHT = 500;
+
+// 地図画像パス
+const FLOOR_IMAGES = {
+    1: 'images/floor1.png',
+    2: 'images/floor2.png'
+};
 
 // ========================================
 // ノード（場所）の定義
@@ -18,7 +24,7 @@ const NODES = {
         name: '1C',
         floor: 1,
         x: 150,
-        y: 100,
+        y: 80,
         type: 'classroom',
         nameJa: '1C教室',
         nameEn: 'Class 1C'
@@ -27,7 +33,7 @@ const NODES = {
         name: '1B',
         floor: 1,
         x: 280,
-        y: 100,
+        y: 80,
         type: 'classroom',
         nameJa: '1B教室',
         nameEn: 'Class 1B'
@@ -36,7 +42,7 @@ const NODES = {
         name: '1A',
         floor: 1,
         x: 400,
-        y: 100,
+        y: 80,
         type: 'classroom',
         nameJa: '1A教室',
         nameEn: 'Class 1A'
@@ -45,7 +51,7 @@ const NODES = {
         name: '1D',
         floor: 1,
         x: 100,
-        y: 180,
+        y: 150,
         type: 'classroom',
         nameJa: '1D教室',
         nameEn: 'Class 1D'
@@ -54,7 +60,7 @@ const NODES = {
         name: '1E',
         floor: 1,
         x: 100,
-        y: 260,
+        y: 220,
         type: 'classroom',
         nameJa: '1E教室',
         nameEn: 'Class 1E'
@@ -63,7 +69,7 @@ const NODES = {
         name: '1F',
         floor: 1,
         x: 100,
-        y: 340,
+        y: 290,
         type: 'classroom',
         nameJa: '1F教室',
         nameEn: 'Class 1F'
@@ -72,7 +78,7 @@ const NODES = {
         name: '1G',
         floor: 1,
         x: 100,
-        y: 420,
+        y: 360,
         type: 'classroom',
         nameJa: '1G教室',
         nameEn: 'Class 1G'
@@ -81,7 +87,7 @@ const NODES = {
         name: '1H',
         floor: 1,
         x: 100,
-        y: 500,
+        y: 430,
         type: 'classroom',
         nameJa: '1H教室',
         nameEn: 'Class 1H'
@@ -90,7 +96,7 @@ const NODES = {
         name: '1I',
         floor: 1,
         x: 180,
-        y: 580,
+        y: 520,
         type: 'classroom',
         nameJa: '1I教室',
         nameEn: 'Class 1I'
@@ -98,9 +104,9 @@ const NODES = {
     'fountain_1': {
         name: 'fountain_1',
         floor: 1,
-        x: 240,
-        y: 340,
-        type: 'waypoint',
+        x: 280,
+        y: 300,
+        type: waypoint',
         nameJa: '噴水',
         nameEn: 'Fountain'
     },
@@ -108,7 +114,7 @@ const NODES = {
         name: 'escalator_down_1',
         floor: 1,
         x: 520,
-        y: 280,
+        y: 240,
         type: 'escalator',
         nameJa: '下りエスカレーター',
         nameEn: 'Down Escalator'
@@ -116,8 +122,8 @@ const NODES = {
     'escalator_up_1': {
         name: 'escalator_up_1',
         floor: 1,
-        x: 560,
-        y: 280,
+        x: 570,
+        y: 240,
         type: 'escalator',
         nameJa: '上りエスカレーター',
         nameEn: 'Up Escalator'
@@ -125,8 +131,8 @@ const NODES = {
     'library': {
         name: 'library',
         floor: 1,
-        x: 600,
-        y: 240,
+        x: 620,
+        y: 200,
         type: 'facility',
         nameJa: '図書室',
         nameEn: 'Library'
@@ -134,8 +140,8 @@ const NODES = {
     'insurance': {
         name: 'insurance',
         floor: 1,
-        x: 600,
-        y: 320,
+        x: 620,
+        y: 280,
         type: 'facility',
         nameJa: '保険室',
         nameEn: 'Insurance Office'
@@ -143,8 +149,8 @@ const NODES = {
     'office_1': {
         name: 'office_1',
         floor: 1,
-        x: 900,
-        y: 200,
+        x: 950,
+        y: 150,
         type: 'facility',
         nameJa: '職員室',
         nameEn: 'Staff Office'
@@ -152,7 +158,7 @@ const NODES = {
     'entrance_1': {
         name: 'entrance_1',
         floor: 1,
-        x: 950,
+        x: 1050,
         y: 550,
         type: 'entrance',
         nameJa: '玄関出入口',
@@ -162,7 +168,7 @@ const NODES = {
         name: 'stairs_1',
         floor: 1,
         x: 380,
-        y: 520,
+        y: 480,
         type: 'stairs',
         nameJa: '階段（1階）',
         nameEn: 'Stairs (1F)'
@@ -170,8 +176,8 @@ const NODES = {
     'multipurpose_1': {
         name: 'multipurpose_1',
         floor: 1,
-        x: 650,
-        y: 500,
+        x: 700,
+        y: 480,
         type: 'classroom',
         nameJa: '多目的室',
         nameEn: 'Multipurpose Room'
@@ -179,8 +185,8 @@ const NODES = {
     'year1_assembly': {
         name: 'year1_assembly',
         floor: 1,
-        x: 300,
-        y: 580,
+        x: 280,
+        y: 540,
         type: 'classroom',
         nameJa: '1年分室',
         nameEn: '1st Year Assembly'
@@ -188,8 +194,8 @@ const NODES = {
     'student_council': {
         name: 'student_council',
         floor: 1,
-        x: 380,
-        y: 580,
+        x: 350,
+        y: 540,
         type: 'classroom',
         nameJa: '生徒会',
         nameEn: 'Student Council'
@@ -200,7 +206,7 @@ const NODES = {
         name: '2C',
         floor: 2,
         x: 150,
-        y: 100,
+        y: 80,
         type: 'classroom',
         nameJa: '2C教室',
         nameEn: 'Class 2C'
@@ -209,7 +215,7 @@ const NODES = {
         name: '2B',
         floor: 2,
         x: 280,
-        y: 100,
+        y: 80,
         type: 'classroom',
         nameJa: '2B教室',
         nameEn: 'Class 2B'
@@ -218,7 +224,7 @@ const NODES = {
         name: '2A',
         floor: 2,
         x: 400,
-        y: 100,
+        y: 80,
         type: 'classroom',
         nameJa: '2A教室',
         nameEn: 'Class 2A'
@@ -227,7 +233,7 @@ const NODES = {
         name: '2D',
         floor: 2,
         x: 100,
-        y: 180,
+        y: 150,
         type: 'classroom',
         nameJa: '2D教室',
         nameEn: 'Class 2D'
@@ -236,7 +242,7 @@ const NODES = {
         name: '2E',
         floor: 2,
         x: 100,
-        y: 260,
+        y: 220,
         type: 'classroom',
         nameJa: '2E教室',
         nameEn: 'Class 2E'
@@ -245,7 +251,7 @@ const NODES = {
         name: '2F',
         floor: 2,
         x: 100,
-        y: 340,
+        y: 290,
         type: 'classroom',
         nameJa: '2F教室',
         nameEn: 'Class 2F'
@@ -254,7 +260,7 @@ const NODES = {
         name: '2G',
         floor: 2,
         x: 100,
-        y: 420,
+        y: 360,
         type: 'classroom',
         nameJa: '2G教室',
         nameEn: 'Class 2G'
@@ -263,7 +269,7 @@ const NODES = {
         name: '2H',
         floor: 2,
         x: 100,
-        y: 500,
+        y: 430,
         type: 'classroom',
         nameJa: '2H教室',
         nameEn: 'Class 2H'
@@ -272,7 +278,7 @@ const NODES = {
         name: '2I',
         floor: 2,
         x: 180,
-        y: 580,
+        y: 520,
         type: 'classroom',
         nameJa: '2I教室',
         nameEn: 'Class 2I'
@@ -281,7 +287,7 @@ const NODES = {
         name: 'year2_assembly',
         floor: 2,
         x: 280,
-        y: 580,
+        y: 540,
         type: 'classroom',
         nameJa: '2年分室',
         nameEn: '2nd Year Assembly'
@@ -290,7 +296,7 @@ const NODES = {
         name: 'year3_assembly',
         floor: 2,
         x: 400,
-        y: 580,
+        y: 540,
         type: 'classroom',
         nameJa: '3年分室',
         nameEn: '3rd Year Assembly'
@@ -298,8 +304,8 @@ const NODES = {
     'emission_hall': {
         name: 'emission_hall',
         floor: 2,
-        x: 240,
-        y: 340,
+        x: 280,
+        y: 300,
         type: 'classroom',
         nameJa: '吹き抜け',
         nameEn: 'Atrium'
@@ -308,7 +314,7 @@ const NODES = {
         name: 'escalator_down_2',
         floor: 2,
         x: 520,
-        y: 280,
+        y: 240,
         type: 'escalator',
         nameJa: '下りエスカレーター',
         nameEn: 'Down Escalator'
@@ -316,8 +322,8 @@ const NODES = {
     'escalator_up_2': {
         name: 'escalator_up_2',
         floor: 2,
-        x: 560,
-        y: 280,
+        x: 570,
+        y: 240,
         type: 'escalator',
         nameJa: '上りエスカレーター',
         nameEn: 'Up Escalator'
@@ -325,8 +331,8 @@ const NODES = {
     'guidance': {
         name: 'guidance',
         floor: 2,
-        x: 600,
-        y: 240,
+        x: 620,
+        y: 200,
         type: 'facility',
         nameJa: '指導室',
         nameEn: 'Guidance Office'
@@ -334,8 +340,8 @@ const NODES = {
     'principal': {
         name: 'principal',
         floor: 2,
-        x: 600,
-        y: 320,
+        x: 620,
+        y: 280,
         type: 'facility',
         nameJa: '校長室',
         nameEn: "Principal's Office"
@@ -344,7 +350,7 @@ const NODES = {
         name: 'warehouse',
         floor: 2,
         x: 520,
-        y: 100,
+        y: 80,
         type: 'facility',
         nameJa: '倉庫',
         nameEn: 'Warehouse'
@@ -352,8 +358,8 @@ const NODES = {
     '3I': {
         name: '3I',
         floor: 2,
-        x: 750,
-        y: 100,
+        x: 850,
+        y: 80,
         type: 'classroom',
         nameJa: '3I教室',
         nameEn: 'Class 3I'
@@ -361,8 +367,8 @@ const NODES = {
     '3H': {
         name: '3H',
         floor: 2,
-        x: 850,
-        y: 100,
+        x: 920,
+        y: 80,
         type: 'classroom',
         nameJa: '3H教室',
         nameEn: 'Class 3H'
@@ -370,8 +376,8 @@ const NODES = {
     '3G': {
         name: '3G',
         floor: 2,
-        x: 950,
-        y: 150,
+        x: 990,
+        y: 120,
         type: 'classroom',
         nameJa: '3G教室',
         nameEn: 'Class 3G'
@@ -379,8 +385,8 @@ const NODES = {
     '3F': {
         name: '3F',
         floor: 2,
-        x: 950,
-        y: 250,
+        x: 990,
+        y: 200,
         type: 'classroom',
         nameJa: '3F教室',
         nameEn: 'Class 3F'
@@ -388,8 +394,8 @@ const NODES = {
     '3E': {
         name: '3E',
         floor: 2,
-        x: 950,
-        y: 350,
+        x: 990,
+        y: 280,
         type: 'classroom',
         nameJa: '3E教室',
         nameEn: 'Class 3E'
@@ -397,8 +403,8 @@ const NODES = {
     '3D': {
         name: '3D',
         floor: 2,
-        x: 950,
-        y: 450,
+        x: 990,
+        y: 360,
         type: 'classroom',
         nameJa: '3D教室',
         nameEn: 'Class 3D'
@@ -406,8 +412,8 @@ const NODES = {
     '3C': {
         name: '3C',
         floor: 2,
-        x: 950,
-        y: 550,
+        x: 990,
+        y: 440,
         type: 'classroom',
         nameJa: '3C教室',
         nameEn: 'Class 3C'
@@ -415,7 +421,7 @@ const NODES = {
     'empty_classroom': {
         name: 'empty_classroom',
         floor: 2,
-        x: 750,
+        x: 850,
         y: 520,
         type: 'classroom',
         nameJa: '空き教室',
@@ -424,7 +430,7 @@ const NODES = {
     '3A': {
         name: '3A',
         floor: 2,
-        x: 850,
+        x: 920,
         y: 520,
         type: 'classroom',
         nameJa: '3A教室',
@@ -433,7 +439,7 @@ const NODES = {
     '3B': {
         name: '3B',
         floor: 2,
-        x: 950,
+        x: 990,
         y: 520,
         type: 'classroom',
         nameJa: '3B教室',
@@ -443,7 +449,7 @@ const NODES = {
         name: 'stairs_2',
         floor: 2,
         x: 380,
-        y: 520,
+        y: 480,
         type: 'stairs',
         nameJa: '階段（2階）',
         nameEn: 'Stairs (2F)'
@@ -454,7 +460,7 @@ const NODES = {
         name: 'wp_1_1',
         floor: 1,
         x: 200,
-        y: 150,
+        y: 130,
         type: 'waypoint',
         nameJa: 'ウェイポイント',
         nameEn: 'Waypoint'
@@ -463,7 +469,7 @@ const NODES = {
         name: 'wp_1_2',
         floor: 1,
         x: 500,
-        y: 150,
+        y: 130,
         type: 'waypoint',
         nameJa: 'ウェイポイント',
         nameEn: 'Waypoint'
@@ -471,8 +477,8 @@ const NODES = {
     'wp_1_3': {
         name: 'wp_1_3',
         floor: 1,
-        x: 700,
-        y: 400,
+        x: 800,
+        y: 350,
         type: 'waypoint',
         nameJa: 'ウェイポイント',
         nameEn: 'Waypoint'
@@ -481,7 +487,7 @@ const NODES = {
         name: 'wp_2_1',
         floor: 2,
         x: 200,
-        y: 150,
+        y: 130,
         type: 'waypoint',
         nameJa: 'ウェイポイント',
         nameEn: 'Waypoint'
@@ -490,7 +496,7 @@ const NODES = {
         name: 'wp_2_2',
         floor: 2,
         x: 700,
-        y: 100,
+        y: 80,
         type: 'waypoint',
         nameJa: 'ウェイポイント',
         nameEn: 'Waypoint'
