@@ -1,0 +1,509 @@
+/* ========================================
+   リセット＆基本スタイル
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+/* ========================================
+   コンテナレイアウト
+   ======================================== */
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* ========================================
+   サイドバー
+   ======================================== */
+.sidebar {
+    width: 380px;
+    background-color: #ffffff;
+    border-right: 2px solid #dc143c;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #dc143c;
+}
+
+.logo h1 {
+    color: #dc143c;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   言語選択
+   ======================================== */
+.language-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.lang-btn {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #dc143c;
+    background-color: #ffffff;
+    color: #dc143c;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.lang-btn.active {
+    background-color: #dc143c;
+    color: #ffffff;
+}
+
+.lang-btn:hover {
+    background-color: #ffebee;
+}
+
+.lang-btn.active:hover {
+    background-color: #c41e3a;
+}
+
+/* ========================================
+   セクション共通スタイル
+   ======================================== */
+section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border-left: 4px solid #dc143c;
+}
+
+section h2 {
+    color: #dc143c;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+/* ========================================
+   ボタン共通スタイル
+   ======================================== */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: #dc143c;
+    color: #ffffff;
+    border: 2px solid #dc143c;
+}
+
+.btn-primary:hover {
+    background-color: #c41e3a;
+    border-color: #a01830;
+    box-shadow: 0 4px 8px rgba(220, 20, 60, 0.3);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: #dc143c;
+    border: 2px solid #dc143c;
+}
+
+.btn-secondary:hover {
+    background-color: #ffebee;
+}
+
+.btn-large {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+}
+
+/* ========================================
+   QRコードセクション
+   ======================================== */
+.qr-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.qr-input-group .btn {
+    width: 100%;
+}
+
+.location-input {
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    color: #666;
+}
+
+.qr-video-container {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #dc143c;
+}
+
+#qr-video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#close-camera-btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* ========================================
+   目的地セクション
+   ======================================== */
+.destination-input-group {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #dc143c;
+    box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.1);
+}
+
+.destination-list {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #ffffff;
+    display: none;
+}
+
+.destination-list.active {
+    display: block;
+}
+
+.destination-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.destination-item:hover {
+    background-color: #ffe8eb;
+    color: #dc143c;
+}
+
+.destination-item.selected {
+    background-color: #dc143c;
+    color: #ffffff;
+}
+
+/* ========================================
+   チェックボックス
+   ======================================== */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #dc143c;
+}
+
+.checkbox-label span {
+    font-size: 14px;
+    color: #333;
+}
+
+/* ========================================
+   ルート情報セクション
+   ======================================== */
+.route-details {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+.route-details p {
+    font-size: 13px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.route-options {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.route-option-btn {
+    padding: 10px 12px;
+    background-color: #ffffff;
+    border: 2px solid #dc143c;
+    color: #dc143c;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.route-option-btn:hover {
+    background-color: #ffe8eb;
+}
+
+.route-option-btn.selected {
+    background-color: #dc143c;
+    color: #ffffff;
+}
+
+.directions-list {
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.direction-item {
+    padding: 10px;
+    border-left: 3px solid #dc143c;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #333;
+    background-color: #fafafa;
+    border-radius: 3px;
+}
+
+.direction-item.important {
+    background-color: #ffebee;
+    font-weight: 600;
+}
+
+/* ========================================
+   エラーメッセージ
+   ======================================== */
+.error-message {
+    padding: 12px 15px;
+    background-color: #ffcdd2;
+    color: #c62828;
+    border-radius: 5px;
+    font-size: 13px;
+    border-left: 4px solid #c62828;
+    margin-bottom: 15px;
+}
+
+/* ========================================
+   メイン地図エリア
+   ======================================== */
+.main-content {
+    flex: 1;
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+#map-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+}
+
+/* ========================================
+   ロケーションマーカー
+   ======================================== */
+.location-marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #dc143c;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #dc143c;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 3px #dc143c, 0 0 0 8px rgba(220, 20, 60, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 3px #dc143c, 0 0 0 12px rgba(220, 20, 60, 0.1);
+    }
+    100% {
+        box-shadow: 0 0 0 3px #dc143c, 0 0 0 8px rgba(220, 20, 60, 0.3);
+    }
+}
+
+/* ========================================
+   スクロールバーカスタマイズ
+   ======================================== */
+.sidebar::-webkit-scrollbar,
+.destination-list::-webkit-scrollbar,
+.directions-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.destination-list::-webkit-scrollbar-track,
+.directions-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.destination-list::-webkit-scrollbar-thumb,
+.directions-list::-webkit-scrollbar-thumb {
+    background: #dc143c;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.destination-list::-webkit-scrollbar-thumb:hover,
+.directions-list::-webkit-scrollbar-thumb:hover {
+    background: #a01830;
+}
+
+/* ========================================
+   レスポンシブ対応
+   ======================================== */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 320px;
+        padding: 15px;
+    }
+
+    section {
+        margin-bottom: 20px;
+        padding: 12px;
+    }
+
+    .logo h1 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 2px solid #dc143c;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .main-content {
+        height: 60vh;
+    }
+
+    .logo h1 {
+        font-size: 18px;
+    }
+
+    .language-selector {
+        margin-bottom: 15px;
+    }
+
+    section {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        padding: 10px;
+        max-height: 35vh;
+    }
+
+    .logo h1 {
+        font-size: 16px;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    section h2 {
+        font-size: 14px;
+    }
+
+    .search-input,
+    .location-input {
+        font-size: 13px;
+        padding: 9px 10px;
+    }
+}
