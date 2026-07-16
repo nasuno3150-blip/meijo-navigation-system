@@ -10,10 +10,14 @@ let currentStartLocation = null;
 let currentDestination = null;
 let currentRoute = null;
 let allRoutes = null;
+let currentFloor = 1; // 表示中の階
 
 // QRコード読み込み関連
 let qrVideoStream = null;
 let isQRScanning = false;
+
+// 地図画像キャッシュ
+const floorImages = {};
 
 // 言語辞書
 const i18n = {
@@ -88,9 +92,29 @@ const i18n = {
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
+    loadFloorImages();
     drawMap();
     populateDestinationList();
 });
+
+// ========================================
+// 地図画像の読み込み
+// ========================================
+function loadFloorImages() {
+    for (let floor = 1; floor <= 2; floor++) {
+        const img = new Image();
+        img.src = FLOOR_IMAGES[floor];
+        img.onload = () => {
+            floorImages[floor] = img;
+            if (floor === currentFloor) {
+                drawMap();
+            }
+        };
+        img.onerror = () => {
+            console.error(`Floor ${floor} image failed to load: ${FLOOR_IMAGES[floor]}`);
+        };
+    }
+}
 
 // ========================================
 // イベントリスナー設定
@@ -145,6 +169,7 @@ function changeLanguage(lang) {
 
     // テキストの更新
     updateUIText();
+    populateDestinationList();
 }
 
 function updateUIText() {
@@ -156,8 +181,7 @@ function updateUIText() {
         'escalator-label': 'escalator-label',
         'elevator-label': 'elevator-label',
         'search-text': 'search-text',
-        'route-title': 'route-title',
-        'close-camera': 'close-camera'
+        'route-title': 'route-title'
     };
 
     for (const [id, key] of Object.entries(texts)) {
@@ -223,11 +247,12 @@ function scanQRCode(video) {
                 // QRコードデータが有効なノードIDかチェック
                 if (NODES[qrData]) {
                     currentStartLocation = qrData;
+                    const node = NODES[qrData];
                     document.getElementById('start-location').value = 
-                        currentLanguage === 'ja' ? NODES[qrData].nameJa : NODES[qrData].nameEn;
+                        currentLanguage === 'ja' ? node.nameJa : node.nameEn;
                     
                     stopQRScanning();
-                    showNotification(`出発地点: ${currentLanguage === 'ja' ? NODES[qrData].nameJa : NODES[qrData].nameEn}`);
+                    showNotification(`出発地点: ${currentLanguage === 'ja' ? node.nameJa : node.nameEn}`);
                 } else {
                     showError(`${i18n[currentLanguage]['qr-error']}: ${qrData}`);
                 }
@@ -529,28 +554,26 @@ function drawMap() {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // グリッドを描画
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 10; i++) {
-        const x = (canvas.width / 10) * i;
-        const y = (canvas.height / 10) * i;
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
+    // 地図画像を描画（読み込み済みの場合）
+    if (floorImages[currentFloor]) {
+        const img = floorImages[currentFloor];
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    } else {
+        // 画像未読み込みの場合は背景色のみ
+        ctx.fillStyle = '#f5f5f5';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#999';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('地図を読み込み中...', canvas.width / 2, canvas.height / 2);
     }
 
     // ノードを描画
     const nodes = graph.getAllNodes();
-    const floor = 1; // 表示中の階
     
     nodes.forEach(node => {
-        if (node.floor === floor) {
+        if (node.floor === currentFloor) {
             drawNode(ctx, node, scale);
         }
     });
@@ -563,33 +586,38 @@ function drawNode(ctx, node, scale) {
     // ノードの色を決定
     let color = '#e0e0e0';
     let textColor = '#333';
+    let radius = 12;
 
     if (node.type === 'classroom') {
         color = '#dcf5f5';
         textColor = '#0097a7';
+        radius = 14;
     } else if (node.type === 'escalator') {
         color = '#ffe0b2';
         textColor = '#e65100';
+        radius = 13;
     } else if (node.type === 'stairs') {
         color = '#f0f4c3';
         textColor = '#558b2f';
+        radius = 13;
     } else if (node.type === 'facility') {
         color = '#f3e5f5';
         textColor = '#6a1b9a';
+        radius = 14;
     } else if (node.type === 'entrance') {
         color = '#ffccbc';
         textColor = '#d84315';
+        radius = 14;
     } else if (node.type === 'waypoint') {
-        color = '#ffffff';
-        textColor = '#999';
+        return; // ウェイポイントは非表示
     }
 
     // ノードを描画
     ctx.fillStyle = color;
     ctx.strokeStyle = '#999';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
 
@@ -647,7 +675,7 @@ function handleMapClick(event) {
     const mapY = y * scale.y;
 
     // 最も近いノードを見つける
-    const nodes = graph.getAllNodes();
+    const nodes = graph.getAllNodes().filter(n => n.floor === currentFloor);
     let closestNode = null;
     let minDistance = Infinity;
 
@@ -656,7 +684,7 @@ function handleMapClick(event) {
         const dy = node.y - mapY;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < 30 && distance < minDistance) {
+        if (distance < 40 && distance < minDistance) {
             minDistance = distance;
             closestNode = node;
         }
@@ -689,5 +717,4 @@ function showError(message) {
 
 function showNotification(message) {
     console.log(message);
-    // 必要に応じて通知表示を実装
 }
