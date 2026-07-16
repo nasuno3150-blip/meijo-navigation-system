@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名城大学 屋内ナビゲーションシステム</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- サイドバー -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Meijo Navigation</h1>
+            </div>
+
+            <!-- 言語選択 -->
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="ja">日本語</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
+
+            <!-- QRコード読み込みセクション -->
+            <section class="qr-section">
+                <h2 id="qr-title">出発地点</h2>
+                <div class="qr-input-group">
+                    <button id="start-qr-btn" class="btn btn-primary">
+                        <span id="qr-btn-text">カメラで読み込み</span>
+                    </button>
+                    <input type="text" id="start-location" class="location-input" placeholder="または直接入力" readonly>
+                </div>
+                <div id="qr-video-container" class="qr-video-container" style="display: none;">
+                    <video id="qr-video" playsinline></video>
+                    <button id="close-camera-btn" class="btn btn-secondary">キャンセル</button>
+                </div>
+            </section>
+
+            <!-- 目的地選択セクション -->
+            <section class="destination-section">
+                <h2 id="destination-title">目的地</h2>
+                <div class="destination-input-group">
+                    <input type="text" id="destination-search" class="search-input" placeholder="検索...">
+                    <div id="destination-list" class="destination-list"></div>
+                </div>
+            </section>
+
+            <!-- オプション -->
+            <section class="options-section">
+                <h2 id="options-title">オプション</h2>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="escalator-priority" checked>
+                    <span id="escalator-label">エスカレーター優先</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="elevator-priority">
+                    <span id="elevator-label">エレベーター優先</span>
+                </label>
+            </section>
+
+            <!-- ルート検索ボタン -->
+            <section class="search-section">
+                <button id="search-route-btn" class="btn btn-primary btn-large">
+                    <span id="search-text">ルート検索</span>
+                </button>
+            </section>
+
+            <!-- ルート情報表示 -->
+            <section class="route-info-section" id="route-info-section" style="display: none;">
+                <h2 id="route-title">ルート情報</h2>
+                <div class="route-details">
+                    <p id="distance-info"></p>
+                    <p id="time-info"></p>
+                </div>
+                <div id="route-options" class="route-options"></div>
+                <div id="directions-list" class="directions-list"></div>
+            </section>
+
+            <!-- エラーメッセージ -->
+            <div id="error-message" class="error-message" style="display: none;"></div>
+        </aside>
+
+        <!-- メイン地図���リア -->
+        <main class="main-content">
+            <div class="map-container">
+                <canvas id="map-canvas"></canvas>
+                <div id="location-marker" class="location-marker" style="display: none;"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- スクリプト -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="mapData.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
